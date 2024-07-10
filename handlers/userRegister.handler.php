@@ -10,9 +10,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $telefon = trim(htmlspecialchars($_POST['telefon']));
     $location = trim(htmlspecialchars($_POST['locatie']));
 
-    $query = "username=" . urlencode($username) . "&email=" . urlencode($email) . "&telefon=" . urlencode($telefon) . "&locatie=" . urlencode($location);
-
-    header("Location: ../views/success.view.php?" . $query);
 
     $db = getDbConnection();
     $userController = new UserController($db);
