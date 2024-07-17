@@ -1,6 +1,7 @@
 <?php
 require_once '../models/UserModel.php';
-session_start();
+ session_start();
+
 
 class UserController
 {
@@ -56,6 +57,7 @@ class UserController
         $errors = $this->validateUserRegister($username, $email, $pwd, $telefon, $locatie);
         if (empty($errors)) {
             $this->userModel->registerUser($username, $email, $pwd, $telefon, $locatie);
+            
             // header('Location: ../views/success.view.php?' . http_build_query(['username' => $username, 'email' => $email, 'telefon' => $telefon, 'locatie' => $locatie]));
             header('Location: ../views/login.view.php');
             die();
@@ -86,13 +88,39 @@ class UserController
     {
         $errors = $this->validateUserUpdate($email, $telefon, $locatie);
         if (empty($errors)) {
-            
+
             $user = $this->userModel->getUserByUsername($username);
             $_SESSION['loggedInUser'] = $user;
 
             $this->userModel->updateUserProfile($username, $email, $telefon, $locatie);
-            $_SESSION['telefon'] = $telefon;
-            $_SESSION['locatie'] = $locatie;
+            $_SESSION['loggedInUser']['email'] = $email;
+            $_SESSION['loggedInUser']['telefon'] = $telefon;
+            $_SESSION['loggedInUser']['locatie'] = $locatie;
+            header('Location:../views/profile.view.php');
+            die();
+        } else {
+            $_SESSION['errors_update'] = $errors;
+            header('Location:../views/profile.view.php');
+            die();
+        }
+    }
+
+    public function updateUserProfileWithPic($username, $email, $telefon, $locatie, $profile_pic)
+    {
+        $errors = $this->validateUserUpdate($email, $telefon, $locatie);
+
+        if (empty($errors) && $profile_pic) {
+
+            $user = $this->userModel->getUserByUsername($username);
+            $_SESSION['loggedInUser'] = $user;
+
+            $this->userModel->updateUserProfileWithPic($username, $email, $telefon, $locatie, $profile_pic);
+
+            $_SESSION['loggedInUser']['email'] = $email;
+            $_SESSION['loggedInUser']['username'] = $username;
+            $_SESSION['loggedInUser']['telefon'] = $telefon;
+            $_SESSION['loggedInUser']['locatie'] = $locatie;
+            $_SESSION['loggedInUser']['profile_pic'] = $profile_pic;
             header('Location:../views/profile.view.php');
             die();
         } else {
@@ -132,4 +160,33 @@ class UserController
 
         return $errors;
     }
+    public function ValidateUserFile()
+    {
+        $profile_pic = $_FILES['profile_pic'];
+        $upload_dir = '../assets/users/';
+        $allowed_types = ['image/png', 'image/jpeg', 'image/gif', 'image/jpg'];
+        $errors = [];
+        $profile_pic_path = null;
+    
+        if ($profile_pic['error'] == UPLOAD_ERR_OK) {
+            if (in_array($profile_pic['type'], $allowed_types)) {
+                $file_ext = pathinfo($profile_pic['name'], PATHINFO_EXTENSION);
+                $file_name = uniqid() . '.' . $file_ext;
+                $file_path = $upload_dir . $file_name;
+    
+                if (move_uploaded_file($profile_pic['tmp_name'], $file_path)) {
+                    $profile_pic_path = $file_name;
+                } else {
+                    $errors[] = 'Failed to upload profile picture.';
+                }
+            } else {
+                $errors[] = 'Invalid file type. Only PNG, JPEG, GIF, and JPG are allowed.';
+            }
+        } elseif ($profile_pic['error'] != UPLOAD_ERR_NO_FILE) {
+            $errors[] = 'No profile picture uploaded.';
+        }
+    
+        return ['path' => $profile_pic_path, 'errors' => $errors];
+    }
+    
 }

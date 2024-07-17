@@ -57,4 +57,16 @@ class UserModel
 
         return $stmt->execute();
     }
+
+    public function updateUserProfileWithPic($username, $email, $telefon, $locatie, $profile_pic)
+    {
+        $stmt = $this->db->prepare("UPDATE users SET email = :email, telefon = :telefon, locatie = :locatie, profile_pic = :profile_pic WHERE username = :username");
+        $stmt->bindParam(':username', $username);
+        $stmt->bindParam(':email', $email);
+        $stmt->bindParam(':telefon', $telefon);
+        $stmt->bindParam(':locatie', $locatie);
+        $stmt->bindParam(':profile_pic', $profile_pic);
+
+        return $stmt->execute();
+    }
 }

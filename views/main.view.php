@@ -1,3 +1,8 @@
+<?php
+session_start();
+$user = $_SESSION['loggedInUser'] ?? [];
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -16,7 +21,7 @@
             <img src="../assets/menu.svg" alt="">
             <div class="flex gap-4">
                 <img src="../assets/notification.svg" alt="">
-                <a href="profile.view.php"><img src="../assets/avatar.png" class="max-w-10" alt=""></a>
+                <a href="profile.view.php"><img src="../assets/users/<?= htmlspecialchars($user['profile_pic'] ?? 'avatar.png'); ?>" class="w-[45px] h-[45px] rounded-full object-fill" alt=""></a>
             </div>
         </nav>
     </div>
