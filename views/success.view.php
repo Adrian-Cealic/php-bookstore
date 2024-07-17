@@ -5,10 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
-    <title>Document</title>
+    <link rel="shortcut icon" href="../assets/logo.svg" type="image/x-icon">
+
+    <title>User</title>
 </head>
 
 <body class="bg-[#105c8a]">
+    <a class="absolute top-0 p-4 right-0" href="main.view.php"><img class="max-w-24" src="../assets/logowhite.svg" alt=""></a>
     <form action="../handlers/userRegister.handler.php" method="get">
         <div
             class="container mx-auto flex justify-center items-center max-w-64 sm:max-w-md md:max-w-xl mt-32 flex-col gap-4 bg-white p-8 rounded-lg shadow-lg">

@@ -22,6 +22,13 @@ class UserModel
 
         return $stmt->execute();
     }
+    public function loginUser($username, $password)
+    {
+        $stmt = $this->db->prepare("SELECT password,username FROM users where username=:username and password=:password");
+        $stmt->bindParam(':username', $username);
+        $stmt->bindParam(':password', $password);
+        return $stmt->execute();
+    }
 
     public function checkUsernameExists($username)
     {
@@ -30,7 +37,24 @@ class UserModel
         $stmt->execute();
 
         return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 
+    public function getUserByUsername($username)
+    {
+        $stmt = $this->db->prepare("SELECT * FROM users WHERE username = :username");
+        $stmt->bindParam(':username', $username);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC); //return array with all columns from db table
+    }
 
+    public function updateUserProfile($username, $email, $telefon, $locatie)
+    {
+        $stmt = $this->db->prepare("UPDATE users SET email = :email, telefon = :telefon, locatie = :locatie WHERE username = :username");
+        $stmt->bindParam(':username', $username);
+        $stmt->bindParam(':email', $email);
+        $stmt->bindParam(':telefon', $telefon);
+        $stmt->bindParam(':locatie', $locatie);
+
+        return $stmt->execute();
     }
 }
