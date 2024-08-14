@@ -1,6 +1,6 @@
 <?php
 require_once '../models/UserModel.php';
- session_start();
+session_start();
 
 
 class UserController
@@ -19,8 +19,8 @@ class UserController
         // validate username
         if (empty($username)) {
             $errors['username'] = 'Username is required';
-        } elseif (!preg_match("/^[a-zA-Z0-9_]{5,15}$/", $username)) {
-            $errors['username'] = "Username must be between 5 and 15 characters and contain only alphanumeric characters and underscores";
+        } elseif (!preg_match("/^[a-zA-Z0-9_]{3,15}$/", $username)) {
+            $errors['username'] = "Username must be between 3 and 15 characters and contain only alphanumeric characters and underscores";
         } elseif ($this->userModel->checkUsernameExists($username)) {
             $errors['username'] = 'Username already exists';
         }
@@ -57,9 +57,9 @@ class UserController
         $errors = $this->validateUserRegister($username, $email, $pwd, $telefon, $locatie);
         if (empty($errors)) {
             $this->userModel->registerUser($username, $email, $pwd, $telefon, $locatie);
-            
-            // header('Location: ../views/success.view.php?' . http_build_query(['username' => $username, 'email' => $email, 'telefon' => $telefon, 'locatie' => $locatie]));
-            header('Location: ../views/login.view.php');
+            $user = $this->userModel->getUserByUsername($username);
+            $_SESSION['loggedInUser'] = $user;
+            header('Location: ../views/main.view.php');
             die();
         } else {
             $_SESSION['errors'] = $errors;
@@ -74,7 +74,11 @@ class UserController
         $user = $this->userModel->getUserByUsername($username);
         if ($user && password_verify($pwd, $user['pwd'])) {
             $_SESSION['loggedInUser'] = $user;
-            header('Location:../views/main.view.php');
+            if ($user['role'] == 'admin') {
+                header('Location: ../views/admin.view.php');
+            } else {
+                header('Location:../views/main.view.php');
+            }
             die();
         } else {
             $errors['login'] = 'Invalid username or password';
@@ -167,13 +171,13 @@ class UserController
         $allowed_types = ['image/png', 'image/jpeg', 'image/gif', 'image/jpg'];
         $errors = [];
         $profile_pic_path = null;
-    
+
         if ($profile_pic['error'] == UPLOAD_ERR_OK) {
             if (in_array($profile_pic['type'], $allowed_types)) {
                 $file_ext = pathinfo($profile_pic['name'], PATHINFO_EXTENSION);
                 $file_name = uniqid() . '.' . $file_ext;
                 $file_path = $upload_dir . $file_name;
-    
+
                 if (move_uploaded_file($profile_pic['tmp_name'], $file_path)) {
                     $profile_pic_path = $file_name;
                 } else {
@@ -185,8 +189,7 @@ class UserController
         } elseif ($profile_pic['error'] != UPLOAD_ERR_NO_FILE) {
             $errors[] = 'No profile picture uploaded.';
         }
-    
+
         return ['path' => $profile_pic_path, 'errors' => $errors];
     }
-    
 }
