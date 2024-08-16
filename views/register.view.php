@@ -34,7 +34,7 @@ unset($_SESSION['errors']);
                         <span class='text-red-500 text-sm'><?= $error ?>!</span><br>
                     <?php endforeach ?>
                 </div>
-            <?php endif ?>
+            <?php endif ?>            
         </form>
     </div>
 </body>

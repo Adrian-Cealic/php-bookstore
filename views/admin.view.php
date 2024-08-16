@@ -5,6 +5,14 @@ if ($user['role'] != 'admin') {
     header('Location: ../index.php');
     die();
 }
+require_once "../controllers/ProductController.php";
+require_once "../config/db.cofig.php";
+
+$db = getDbConnection();
+$productControler = new ProductController($db);
+
+$products = $productControler->getAllProducts();
+
 ?>
 
 <!DOCTYPE html>
@@ -43,6 +51,19 @@ if ($user['role'] != 'admin') {
             <a href="addProduct.view.php" target="_blank" class="bg-emerald-500 text-center px-16 py-4 text-white rounded-lg hover:bg-emerald-800">Add new product</a>
         </div>
     </div>
+    <div class="grid grid-cols-2 lg:grid-cols-5 flex-wrap gap-4 p-4">
+    <?php foreach ($products as $product) : ?>
+        <a href="#" class="flex flex-col bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300 text-balance">
+            <img class="object-contain w-full h-[250px]" src="../assets/products/<?= htmlspecialchars($product['img']); ?>" alt="<?= htmlspecialchars($product['name']); ?>" />
+            <div class="p-4 w-[320px]">
+                <p class="font-bold text-xl text-gray-800 mb-1"><?= htmlspecialchars($product['name']); ?></p>
+                <p class="text-gray-600 text-lg mb-1"><?= htmlspecialchars($product['author']); ?></p>
+                <p class="text-gray-600 text-lg"><?= htmlspecialchars($product['price']); ?>$</p>
+            </div>
+        </a>
+    <?php endforeach; ?>
+</div>
+
 </body>
 
 </html>

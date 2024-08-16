@@ -1,8 +1,6 @@
 <?php
 require_once '../models/UserModel.php';
 session_start();
-
-
 class UserController
 {
     private $userModel;
@@ -163,33 +161,5 @@ class UserController
         }
 
         return $errors;
-    }
-    public function ValidateUserFile()
-    {
-        $profile_pic = $_FILES['profile_pic'];
-        $upload_dir = '../assets/users/';
-        $allowed_types = ['image/png', 'image/jpeg', 'image/gif', 'image/jpg'];
-        $errors = [];
-        $profile_pic_path = null;
-
-        if ($profile_pic['error'] == UPLOAD_ERR_OK) {
-            if (in_array($profile_pic['type'], $allowed_types)) {
-                $file_ext = pathinfo($profile_pic['name'], PATHINFO_EXTENSION);
-                $file_name = uniqid() . '.' . $file_ext;
-                $file_path = $upload_dir . $file_name;
-
-                if (move_uploaded_file($profile_pic['tmp_name'], $file_path)) {
-                    $profile_pic_path = $file_name;
-                } else {
-                    $errors[] = 'Failed to upload profile picture.';
-                }
-            } else {
-                $errors[] = 'Invalid file type. Only PNG, JPEG, GIF, and JPG are allowed.';
-            }
-        } elseif ($profile_pic['error'] != UPLOAD_ERR_NO_FILE) {
-            $errors[] = 'No profile picture uploaded.';
-        }
-
-        return ['path' => $profile_pic_path, 'errors' => $errors];
     }
 }
