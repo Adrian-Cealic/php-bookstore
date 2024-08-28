@@ -1,7 +1,14 @@
 <nav class="flex justify-between items-center">
-    <img src="../assets/menu.svg" alt="">
+    <img src="../assets/menu.svg" alt="menu" id="menu">
     <div class="flex gap-4">
         <img src="../assets/notification.svg" alt="">
         <a href="profile.view.php"><img src="../assets/users/<?= htmlspecialchars($user['profile_pic'] ?? 'avatar.png'); ?>" class="w-[45px] h-[45px] rounded-full object-cover" alt=""></a>
     </div>
 </nav>
+<link rel="stylesheet" href="../styles/style.css">
+<script src="../scripts/script.js" defer></script>
+<div id="overlayMenu" class="fixed inset-0 bg-white text-[#EB5757] flex flex-col items-center justify-center transform scale-0 transition-transform duration-300 text-2xl gap-5">
+    <a href="admin.view.php">Home</a>
+    <a href="addProduct.view.php">Add Product</a>
+    <a href="profile.view.php">Profile</a>
+</div>

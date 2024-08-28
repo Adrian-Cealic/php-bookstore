@@ -1,6 +1,5 @@
 <?php
 require_once '../models/ProductModel.php';
-
 class ProductController
 {
     private $productModel;
@@ -67,5 +66,9 @@ class ProductController
     public function getAllProducts()
     {
         return $this->productModel->getAllProducts();
+    }
+    public function getProductById($id)
+    {
+        return $this->productModel->getProductById($id);
     }
 }
