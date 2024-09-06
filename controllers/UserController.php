@@ -72,11 +72,7 @@ class UserController
         $user = $this->userModel->getUserByUsername($username);
         if ($user && password_verify($pwd, $user['pwd'])) {
             $_SESSION['loggedInUser'] = $user;
-            if ($user['role'] == 'admin') {
-                header('Location: ../views/admin.view.php');
-            } else {
-                header('Location:../views/main.view.php');
-            }
+            header('Location:../views/main.view.php');
             die();
         } else {
             $errors['login'] = 'Invalid username or password';
@@ -102,7 +98,7 @@ class UserController
             die();
         } else {
             $_SESSION['errors_update'] = $errors;
-            header('Location:../views/profile.view.php');
+            // header('Location:../views/profile.view.php');
             die();
         }
     }
@@ -135,13 +131,6 @@ class UserController
     public function validateUserUpdate($email, $telefon, $locatie)
     {
         $errors = [];
-
-        // validate username
-        // if (empty($username)) {
-        //     $errors['username'] = 'Username is required for update';
-        // } elseif (!preg_match("/^[a-zA-Z0-9_]{5,15}$/", $username)) {
-        //     $errors['username'] = "Username must be between 5 and 15 characters and contain only alphanumeric characters and underscores";
-        // }
 
         // validate email
         if (empty($email)) {

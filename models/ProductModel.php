@@ -1,5 +1,4 @@
 <?php
-
 class ProductModel
 {
     private $db; // pdo database
@@ -32,5 +31,36 @@ class ProductModel
         $stmt->bindParam(':id', $id);
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+    public function deleteProduct($productId)
+    {
+        $stmt = $this->db->prepare("DELETE FROM products WHERE id = :productId");
+        $stmt->bindParam(':productId', $productId);
+        return $stmt->execute();
+    }
+    public function updateProduct($id, $name, $author, $price, $description, $qty)
+    {
+        $stmt = $this->db->prepare("UPDATE products SET name = :name, author = :author, price = :price, description = :description, qty = :qty WHERE id = :id");
+        $stmt->bindParam(':id', $id);
+        $stmt->bindParam(':name', $name);
+        $stmt->bindParam(':author', $author);
+        $stmt->bindParam(':price', $price);
+        $stmt->bindParam(':description', $description);
+        $stmt->bindParam(':qty', $qty);
+
+        return $stmt->execute();
+    }
+    public function updateProductWithPic($id, $name, $author, $price, $description, $qty, $product_img)
+    {
+        $stmt = $this->db->prepare("UPDATE products SET name = :name, author = :author, price = :price, description = :description, qty = :qty, img = :img WHERE id = :id");
+        $stmt->bindParam(':id', $id);
+        $stmt->bindParam(':name', $name);
+        $stmt->bindParam(':author', $author);
+        $stmt->bindParam(':price', $price);
+        $stmt->bindParam(':description', $description);
+        $stmt->bindParam(':qty', $qty);
+        $stmt->bindParam(':img', $product_img);
+
+        return $stmt->execute();
     }
 }

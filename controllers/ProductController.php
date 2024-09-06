@@ -1,5 +1,8 @@
 <?php
 require_once '../models/ProductModel.php';
+
+session_start();
+
 class ProductController
 {
     private $productModel;
@@ -70,5 +73,36 @@ class ProductController
     public function getProductById($id)
     {
         return $this->productModel->getProductById($id);
+    }
+    public function delete_product($id)
+    {
+        $this->productModel->deleteProduct($id);
+        header('Location:../views/main.view.php');
+        die();
+    }
+    public function update_product($id, $name, $author, $price, $description, $qty){
+        $errors = $this->validateProduct($name, $author, $price, $description, $qty);
+        if (empty($errors)) {
+            $this->productModel->updateProduct($id, $name, $author, $price, $description, $qty);
+            header('Location:../views/updateProduct.view.php');
+            die();
+        } else {
+            $_SESSION['errors_product_update'] = $errors;
+            header('Location:../views/updateProduct.view.php');
+            die();
+        }
+    }
+    public function update_product_with_pic($id, $name, $author, $price, $description, $qty, $product_img)
+    {
+        $errors = $this->validateProduct($name, $author, $price, $description, $qty);
+        if (empty($errors)) {
+            $this->productModel->updateProductWithPic($id, $name, $author, $price, $description, $qty, $product_img);
+            header('Location:../views/updateProduct.view.php');
+            die();
+        } else {
+            $_SESSION['errors_product_update'] = $errors;
+            header('Location:../handlers/updateProduct.handler.php');
+            die();
+        }
     }
 }

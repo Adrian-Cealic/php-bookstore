@@ -1,5 +1,4 @@
 <?php
-
 class UserModel
 {
     private $db; // pdo database

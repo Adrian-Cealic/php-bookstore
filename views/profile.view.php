@@ -3,7 +3,6 @@ session_start();
 $user = isset($_SESSION['loggedInUser']) ? $_SESSION['loggedInUser'] : [];
 $errors = isset($_SESSION['errors_update']) ? $_SESSION['errors_update'] : [];
 unset($_SESSION['errors_update']);
-
 ?>
 
 <!DOCTYPE html>
@@ -22,7 +21,7 @@ unset($_SESSION['errors_update']);
     <form action="../handlers/updateUser.handler.php" method="post" enctype="multipart/form-data">
         <div class="container mx-auto flex justify-center max-w-68 sm:max-w-md md:max-w-xl mt-8 flex-col gap-4 bg-white p-8 rounded-lg shadow-lg">
             <div class="">
-                <a href="<?= $user['role'] == 'admin' ? 'admin.view.php' : 'main.view.php' ?>" class="flex items-center gap-2">
+                <a href="main.view.php" class="flex items-center gap-2">
                     <img src="../assets/site_assets/back.svg" alt="go back">
                     <span class="text-lg">Home</span>
                 </a>
@@ -57,7 +56,6 @@ unset($_SESSION['errors_update']);
                 <input class=" border drop-shadow-xl border-[#8E8E93] rounded px-3 py-1" type="file" name="profile_pic" accept="image/*">
             </div>
             <span class="border border-gray-500 w-full"></span>
-            <button class="bg-[#EB5757] text-white py-2 px-10 sm:px-20 rounded-md" type="submit">Save changes</button>
             <?php if (!empty($errors)) : ?>
                 <div class="container flex justify-end items-center flex-col">
                     <?php foreach ($errors as $error) : ?>
@@ -65,6 +63,8 @@ unset($_SESSION['errors_update']);
                     <?php endforeach ?>
                 </div>
             <?php endif ?>
+            <button class="bg-[#EB5757] text-white py-2 px-10 sm:px-20 rounded-md" name="confirm_update">Save changes</button>
+            <button class="bg-[#EB5757] text-white py-2 px-10 sm:px-20 rounded-md" name="logout">Logout</button>
         </div>
 
     </form>
