@@ -84,6 +84,11 @@ class ProductController
         $errors = $this->validateProduct($name, $author, $price, $description, $qty);
         if (empty($errors)) {
             $this->productModel->updateProduct($id, $name, $author, $price, $description, $qty);
+            $_SESSION['product']['name'] = $name;
+            $_SESSION['product']['author'] = $author;
+            $_SESSION['product']['price'] = $price;
+            $_SESSION['product']['description'] = $description;
+            $_SESSION['product']['qty'] = $qty;
             header('Location:../views/updateProduct.view.php');
             die();
         } else {
@@ -97,7 +102,14 @@ class ProductController
         $errors = $this->validateProduct($name, $author, $price, $description, $qty);
         if (empty($errors)) {
             $this->productModel->updateProductWithPic($id, $name, $author, $price, $description, $qty, $product_img);
+            $_SESSION['product']['name'] = $name;
+            $_SESSION['product']['author'] = $author;
+            $_SESSION['product']['price'] = $price;
+            $_SESSION['product']['description'] = $description;
+            $_SESSION['product']['qty'] = $qty;
+            $_SESSION['product']['product_img'] = $product_img;
             header('Location:../views/updateProduct.view.php');
+            
             die();
         } else {
             $_SESSION['errors_product_update'] = $errors;
