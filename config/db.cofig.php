@@ -5,7 +5,7 @@ function getDbConnection()
     $host = "localhost";
     $dbname = "bookstore";
     $user = "root";
-    $paswword = "travelmate5335";
+    $paswword = "";
 
     $dsn = "mysql:host=$host;dbname=$dbname";
     try {
